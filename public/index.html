@@ -124,6 +124,19 @@ toggleDarkMode.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
     toggleDarkMode.textContent = document.body.classList.contains("dark-mode") ? "Mode Clair" : "Mode Sombre";
 });
+    <div id="chat-container" style="display: none;">
+    <button id="toggle-dark-mode">Mode Sombre</button>
+    <div id="messages"></div>
+    <div id="typing-indicator"></div>
+    <div id="input-container">
+        <form id="message-form">
+            <input type="text" id="recipient-input" placeholder="Nom d'utilisateur du destinataire" required>
+            <input type="text" id="message-input" placeholder="Entrez un message" required>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+</div>
+
 </script>
 </body>
 </html>
