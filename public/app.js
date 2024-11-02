@@ -83,3 +83,24 @@ toggleDarkMode.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
     toggleDarkMode.textContent = document.body.classList.contains("dark-mode") ? "Mode Clair" : "Mode Sombre";
 });
+document.getElementById('message-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const recipient = document.getElementById('recipient-input').value;
+    const message = document.getElementById('message-input').value;
+
+    if (message.trim() !== "" && recipient.trim() !== "") {
+        socket.emit('send_private_message', { recipient, message });
+        document.getElementById('message-input').value = '';
+        document.getElementById('recipient-input').value = '';
+    }
+});
+
+socket.on('receive_private_message', (data) => {
+    const messageElem = document.createElement('div');
+    messageElem.classList.add('message');
+    messageElem.classList.add(data.sender === socket.username ? 'sender' : 'receiver');
+    messageElem.textContent = `${data.sender} à ${data.recipient}: ${data.message}`;
+    document.getElementById('messages').appendChild(messageElem);
+    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+});
+
