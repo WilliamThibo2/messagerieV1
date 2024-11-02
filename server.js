@@ -1,9 +1,8 @@
-// server.js
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
-const { registerUser, authenticateUser, generateToken, saveMessage, getMessages } = require("./database");
+const { registerUser, authenticateUser, generateToken, createConversation, saveMessage, getMessagesByConversation } = require("./database");
 
 require("dotenv").config();
 
@@ -61,13 +60,36 @@ io.use((socket, next) => {
         next(new Error("Authentication error"));
     }
 }).on("connection", (socket) => {
-    getMessages((err, messages) => {
-        if (!err) socket.emit("load_messages", messages);
+    console.log(`${socket.username} est connecté`);
+
+    // Charger les messages d'une conversation existante
+    socket.on("load_conversation", (conversation_id) => {
+        getMessagesByConversation(conversation_id, (err, messages) => {
+            if (!err) {
+                socket.emit("load_messages", messages);
+            }
+        });
     });
 
-    socket.on("send_message", (message) => {
-        saveMessage(socket.username, message);
-        io.emit("receive_message", { message, sender: socket.username });
+    // Événement pour créer ou rejoindre une conversation
+    socket.on("start_conversation", ({ user1, user2 }) => {
+        createConversation(user1, user2, (err, conversation_id) => {
+            if (err) return socket.emit("error", { message: "Erreur de conversation" });
+            
+            socket.join(`conversation_${conversation_id}`);
+            socket.emit("conversation_started", { conversation_id });
+        });
+    });
+
+    // Envoyer un message privé dans une conversation
+    socket.on("send_private_message", ({ conversation_id, message }) => {
+        saveMessage(conversation_id, socket.username, message);
+        io.to(`conversation_${conversation_id}`).emit("receive_private_message", {
+            conversation_id,
+            sender: socket.username,
+            message,
+            timestamp: new Date()
+        });
     });
 
     socket.on("typing", () => {
@@ -79,6 +101,7 @@ io.use((socket, next) => {
     });
 
     socket.on("disconnect", () => {
+        console.log(`${socket.username} s'est déconnecté`);
         io.emit("user_disconnected", socket.username);
     });
 });
@@ -87,3 +110,4 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server started at http://localhost:${PORT}`);
 });
+
