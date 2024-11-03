@@ -16,6 +16,7 @@
         <input id="password" type="password" placeholder="Votre mot de passe" required>
     </div>
     <button onclick="login()">Se connecter</button>
+    <p id="error-message" style="color: red;"></p>
 
     <script>
         async function login() {
@@ -33,16 +34,16 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    localStorage.setItem('token', data.token); // Stocke le jeton JWT
-                    window.location.href = '/index.html';      // Redirige vers la page protégée
+                    localStorage.setItem('token', data.token);
+                    window.location.href = '/index.html';
                 } else if (response.status === 401) {
-                    alert("Identifiants incorrects");
+                    document.getElementById('error-message').innerText = "Identifiants incorrects";
                 } else {
-                    alert("Échec de la connexion");
+                    document.getElementById('error-message').innerText = "Échec de la connexion. Veuillez réessayer.";
                 }
             } catch (error) {
                 console.error("Erreur lors de la connexion :", error);
-                alert("Erreur lors de la connexion");
+                document.getElementById('error-message').innerText = "Erreur lors de la connexion. Vérifiez votre connexion réseau.";
             }
         }
     </script>
