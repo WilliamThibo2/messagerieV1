@@ -15,8 +15,8 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express-session": "^1.17.3"
-    "socket.io-express-session": "^0.4.0"
+    "express-session": "^1.17.3",
+    "socket.io-express-session": "^0.4.0"  // Vérifie bien cette version
   },
   "engines": {
     "node": "18.x"
@@ -27,3 +27,4 @@
   "author": "",
   "license": "ISC"
 }
+
