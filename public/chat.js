@@ -1,5 +1,8 @@
 const socket = io();
 
+// Envoyer le token lors de la connexion
+socket.emit('join', { token: localStorage.getItem('token') });
+
 // Envoyer un message privé
 function sendMessage() {
     const toEmail = document.getElementById('toEmail').value;
