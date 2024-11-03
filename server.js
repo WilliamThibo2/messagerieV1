@@ -1,113 +1,54 @@
-const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
-const jwt = require("jsonwebtoken");
-const { registerUser, authenticateUser, generateToken, createConversation, saveMessage, getMessagesByConversation } = require("./database");
-
-require("dotenv").config();
+require('dotenv').config();
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/auth');
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+    cors: {
+        origin: '*',
+    },
+});
 
+connectDB();
+
+app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
+app.use('/api/auth', authRoutes);
+app.use(express.static('public'));
 
-const validateUserData = (username, email, password) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-    return username.length >= 3 && emailRegex.test(email) && passwordRegex.test(password);
-};
+let connectedUsers = {};
 
-// Route for signup
-app.post("/signup", (req, res) => {
-    const { username, email, password } = req.body;
-    if (!validateUserData(username, email, password)) {
-        return res.status(400).json({ message: "Invalid data" });
-    }
-    registerUser(username, email, password, (err) => {
-        if (err) {
-            res.status(400).json({ message: "Signup failed. User or email already exists." });
-        } else {
-            res.json({ message: "Signup successful. You can log in now." });
+io.on('connection', (socket) => {
+    console.log('Nouvelle connexion:', socket.id);
+
+    socket.on('join', ({ email }) => {
+        connectedUsers[email] = socket.id;
+        console.log(`${email} connecté avec l'ID ${socket.id}`);
+    });
+
+    socket.on('private_message', ({ to, message }) => {
+        const recipientSocket = connectedUsers[to];
+        if (recipientSocket) {
+            io.to(recipientSocket).emit('receive_message', { from: socket.id, message });
         }
     });
-});
 
-// Route for signin
-app.post("/signin", (req, res) => {
-    const { email, password } = req.body;
-    authenticateUser(email, password, (err, user) => {
-        if (err || !user) {
-            res.status(400).json({ message: "Login failed. Incorrect email or password." });
-        } else {
-            const token = generateToken(user);
-            res.json({ message: "Login successful", username: user.username, token });
-        }
-    });
-});
-
-// Middleware to authenticate users with sockets
-io.use((socket, next) => {
-    const token = socket.handshake.auth.token;
-    if (token) {
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-            if (err) return next(new Error("Authentication error"));
-            socket.username = decoded.username;
-            next();
-        });
-    } else {
-        next(new Error("Authentication error"));
-    }
-}).on("connection", (socket) => {
-    console.log(`${socket.username} est connecté`);
-
-    // Charger les messages d'une conversation existante
-    socket.on("load_conversation", (conversation_id) => {
-        getMessagesByConversation(conversation_id, (err, messages) => {
-            if (!err) {
-                socket.emit("load_messages", messages);
+    socket.on('disconnect', () => {
+        console.log('Utilisateur déconnecté:', socket.id);
+        for (let email in connectedUsers) {
+            if (connectedUsers[email] === socket.id) {
+                delete connectedUsers[email];
+                break;
             }
-        });
-    });
-
-    // Événement pour créer ou rejoindre une conversation
-    socket.on("start_conversation", ({ user1, user2 }) => {
-        createConversation(user1, user2, (err, conversation_id) => {
-            if (err) return socket.emit("error", { message: "Erreur de conversation" });
-            
-            socket.join(`conversation_${conversation_id}`);
-            socket.emit("conversation_started", { conversation_id });
-        });
-    });
-
-    // Envoyer un message privé dans une conversation
-    socket.on("send_private_message", ({ conversation_id, message }) => {
-        saveMessage(conversation_id, socket.username, message);
-        io.to(`conversation_${conversation_id}`).emit("receive_private_message", {
-            conversation_id,
-            sender: socket.username,
-            message,
-            timestamp: new Date()
-        });
-    });
-
-    socket.on("typing", () => {
-        socket.broadcast.emit("typing", socket.username);
-    });
-
-    socket.on("stop_typing", () => {
-        socket.broadcast.emit("stop_typing");
-    });
-
-    socket.on("disconnect", () => {
-        console.log(`${socket.username} s'est déconnecté`);
-        io.emit("user_disconnected", socket.username);
+        }
     });
 });
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`Server started at http://localhost:${PORT}`);
+server.listen(process.env.PORT, () => {
+    console.log(`Serveur démarré sur le port ${process.env.PORT}`);
 });
-
