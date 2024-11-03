@@ -13,7 +13,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: 'http://votre-domaine.com',
+        origin: 'http://votre-domaine.com',  // Remplacez par votre domaine
         methods: ['GET', 'POST'],
     },
 });
@@ -23,7 +23,7 @@ connectDB();
 
 // Configuration des middlewares
 app.use(cors({
-    origin: 'http://votre-domaine.com',
+    origin: 'http://votre-domaine.com',  // Remplacez par votre domaine
     credentials: true,
 }));
 app.use(express.json());
@@ -38,6 +38,8 @@ const sessionMiddleware = session({
 });
 
 app.use(sessionMiddleware);
+
+// Partager la session avec Socket.io
 io.use((socket, next) => {
     sessionMiddleware(socket.request, socket.request.res || {}, next);
 });
@@ -91,3 +93,4 @@ io.on('connection', (socket) => {
 server.listen(process.env.PORT, () => {
     console.log(`Serveur démarré sur le port ${process.env.PORT}`);
 });
+
