@@ -1,142 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messagerie Instantanée</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messagerie Instantanée</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div id="login-container">
-    <div>
-        <form id="signup-form">
-            <h2>Inscription</h2>
-            <input type="text" id="signup-username" placeholder="Pseudonyme" required>
-            <input type="email" id="signup-email" placeholder="Email" required>
-            <input type="password" id="signup-password" placeholder="Mot de passe" required>
-            <button type="submit">S'inscrire</button>
-        </form>
+  <div class="container">
+    <div class="sidebar">
+      <ul>
+        <li>Utilisateur 1</li>
+        <li>Utilisateur 2</li>
+        <li>Utilisateur 3</li>
+        <!-- Plus d'utilisateurs -->
+      </ul>
     </div>
-    <div>
-        <form id="signin-form">
-            <h2>Connexion</h2>
-            <input type="email" id="signin-email" placeholder="Email" required>
-            <input type="password" id="signin-password" placeholder="Mot de passe" required>
-            <button type="submit">Se connecter</button>
-        </form>
+    <div class="chat">
+      <div class="messages">
+        <p>Message 1</p>
+        <p>Message 2</p>
+        <!-- Plus de messages -->
+      </div>
+      <input type="text" placeholder="Écrire un message..." />
     </div>
-</div>
-<div id="chat-container" style="display: none;">
-    <button id="toggle-dark-mode">Mode Sombre</button>
-    <button id="add-conversation">+</button> <!-- Ajout du bouton "+" -->
-    <div id="messages"></div>
-    <div id="typing-indicator"></div>
-    <div id="input-container">
-        <form id="message-form">
-            <input type="text" id="recipient-input" placeholder="Destinataire" required>
-            <input type="text" id="message-input" placeholder="Entrez un message" required>
-            <button type="submit">Envoyer</button>
-        </form>
-    </div>
-</div>
-</div>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-const socket = io({ auth: { token: localStorage.getItem('token') } });
-
-document.getElementById('signup-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = document.getElementById('signup-username').value;
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-
-    try {
-        const response = await fetch('/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, email, password })
-        });
-        const result = await response.json();
-        alert(result.message);
-    } catch (error) {
-        console.error(error);
-        alert('Une erreur est survenue : ' + error.message);
-    }
-});
-
-document.getElementById('signin-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('signin-email').value;
-    const password = document.getElementById('signin-password').value;
-
-    try {
-        const response = await fetch('/signin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-        const result = await response.json();
-
-        if (response.ok) {
-            localStorage.setItem('token', result.token);
-            document.getElementById('login-container').style.display = 'none';
-            document.getElementById('chat-container').style.display = 'block';
-            socket.username = result.username;  // Stocker le pseudonyme
-        } else {
-            alert(result.message);
-        }
-    } catch (error) {
-        console.error(error);
-        alert('Une erreur est survenue : ' + error.message);
-    }
-});
-
-document.getElementById('message-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const message = document.getElementById('message-input').value;
-
-    if (message.trim() !== "") {
-        socket.emit('send_message', message);
-        document.getElementById('message-input').value = '';
-    }
-});
-
-socket.on('receive_message', (data) => {
-    const messageElem = document.createElement('div');
-    messageElem.classList.add('message');
-    messageElem.classList.add(data.sender === socket.username ? 'sender' : 'receiver');
-    messageElem.textContent = `${data.sender}: ${data.message}`;
-    document.getElementById('messages').appendChild(messageElem);
-    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
-});
-
-socket.on('typing', (username) => {
-    document.getElementById('typing-indicator').textContent = `${username} est en train d'écrire...`;
-});
-
-socket.on('stop_typing', () => {
-    document.getElementById('typing-indicator').textContent = '';
-});
-
-socket.on('user_connected', (username) => {
-    const infoElem = document.createElement('div');
-    infoElem.classList.add('message', 'info');
-    infoElem.textContent = `${username} s'est connecté`;
-    document.getElementById('messages').appendChild(infoElem);
-});
-
-socket.on('user_disconnected', (username) => {
-    const infoElem = document.createElement('div');
-    infoElem.classList.add('message', 'info');
-    infoElem.textContent = `${username} s'est déconnecté`;
-    document.getElementById('messages').appendChild(infoElem);
-});
-
-const toggleDarkMode = document.getElementById("toggle-dark-mode");
-toggleDarkMode.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-    toggleDarkMode.textContent = document.body.classList.contains("dark-mode") ? "Mode Clair" : "Mode Sombre";
-});
-</script>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
