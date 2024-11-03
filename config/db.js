@@ -1,9 +1,10 @@
+// db.js
 const mongoose = require('mongoose');
-const uri = 'mongodb://localhost:10000/mydatabase'; // Remplacez par votre URI réelle
+const uri = process.env.MONGOURI;
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI, {
+        await mongoose.connect(uri, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
