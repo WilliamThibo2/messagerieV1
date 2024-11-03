@@ -19,6 +19,7 @@ const io = socketIo(server, {
         methods: ['GET', 'POST'],
     },
 });
+console.log('JWT Secret:', process.env.JWT_SECRET);
 
 // Connexion à la base de données
 connectDB();
