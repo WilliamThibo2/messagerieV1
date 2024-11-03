@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Assurez-vous que le chemin est correct pour votre modèle User
+const User = require('../models/User'); 
 require('dotenv').config();
 
 // Fonction d'inscription
@@ -33,7 +33,6 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: 'Identifiants incorrects' });
         }
 
-        // Créer un token JWT incluant l'email pour le chat privé
         const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.json({ token });
@@ -53,7 +52,7 @@ exports.verifyToken = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;  // Attache le payload décodé à la requête
+        req.user = decoded;
         next();
     } catch (error) {
         console.error("Token invalide :", error);
