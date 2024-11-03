@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+</head>
+<body>
+    <h2>Connexion</h2>
+    <input id="email" placeholder="Votre email">
+    <button onclick="login()">Se connecter</button>
+    <script>
+        async function login() {
+            const email = document.getElementById('email').value;
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+
+            if (response.ok) {
+                window.location.href = '/chat.html'; // Redirige vers le chat après la connexion
+            } else {
+                alert("Échec de la connexion");
+            }
+        }
+    </script>
+</body>
+</html>
