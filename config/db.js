@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const uri = 'mongodb://<database>:<admin1234>@<host>:<27017>/<messagerie.mongodb.net>';
+const uri = 'mongodb://localhost:10000/mydatabase'; // Remplacez par votre URI réelle
 
 const connectDB = async () => {
     try {
