@@ -14,5 +14,13 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="chat.js"></script>
+    <script>
+        // Vérifier si l'utilisateur est authentifié
+        const token = localStorage.getItem('token');
+        if (!token) {
+            // Rediriger vers la page de connexion si le token est manquant
+            window.location.href = '/login.html';
+        }
+    </script>
 </body>
 </html>
