@@ -1,187 +1,57 @@
-/* Styles généraux */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #eceff1, #b0bec5);
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  font-family: Arial, sans-serif;
 }
 
-h2 {
-    text-align: center;
-    font-size: 2em;
+.container {
+  display: flex;
+  height: 100vh;
 }
 
-#login-container, #chat-container {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+.sidebar {
+  width: 30%;
+  background-color: #f1f1f1;
+  padding: 20px;
+  overflow-y: auto;
 }
 
-/* Styles pour les boutons */
-button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 5px;
-    background-color: #456268;
-    color: #fff;
-    font-size: 1em;
-    cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.sidebar ul {
+  list-style-type: none;
 }
 
-button:hover {
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-    background-color: #3a5c6b;
+.sidebar li {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* Styles pour les champs de saisie */
-input[type="text"], input[type="email"], input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1em;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
+.sidebar li:hover {
+  background-color: #d0d0d0;
 }
 
-input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
-    border-color: #456268;
-    outline: none;
+.chat {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 }
 
-/* Styles pour les messages */
-#messages {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-height: 400px;
-    overflow-y: auto;
+.messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
 }
 
-.message {
-    padding: 10px 15px;
-    border-radius: 15px;
-    max-width: 80%;
-    font-size: 1em;
-    animation: fadeIn 0.4s ease-in-out;
-}
-
-.message.sender {
-    background-color: #9fd3c7;
-    align-self: flex-end;
-    color: #333;
-    border-radius: 15px 15px 0 15px;
-}
-
-.message.receiver {
-    background-color: #99aabb;
-    align-self: flex-start;
-    color: #fff;
-    border-radius: 15px 15px 15px 0;
-}
-
-.message.info {
-    color: #555;
-    font-style: italic;
-    background-color: #e0e0e0;
-    align-self: center;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-/* Animation de transition pour les messages */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Indicateur de saisie */
-#typing-indicator {
-    font-style: italic;
-    color: #555;
-    padding: 5px 10px;
-    margin: 10px 0;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-}
-
-/* Media queries pour améliorer la responsivité */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-    #login-container, #chat-container {
-        width: 100%;
-        max-width: none;
-        padding: 15px;
-    }
-    h2 {
-        font-size: 1.2em;
-    }
-    button {
-        padding: 10px;
-    }
-}
-
-/* Mode sombre */
-body.dark-mode {
-    background: linear-gradient(135deg, #1c1c1c, #333);
-    color: #ddd;
-}
-
-.dark-mode #login-container, .dark-mode #chat-container {
-    background-color: #2c2c2c;
-}
-
-.dark-mode input, .dark-mode button {
-    background-color: #444;
-    color: #ddd;
-    border: 1px solid #555;
-}
-
-.dark-mode #messages .message.sender {
-    background-color: #4e7d96;
-}
-
-.dark-mode #messages .message.receiver {
-    background-color: #333;
-}
-
-.dark-mode .message.info {
-    background-color: #444;
-    color: #ddd;
-}
-#add-conversation {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: #456268;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-#add-conversation:hover {
-    background-color: #3a5c6b;
-}
-
+input[type="text"] {
+  width: 100%;
+  padding: 
