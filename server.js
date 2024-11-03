@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const http = require('http');
 const socketIo = require('socket.io');
+const jwt = require('jsonwebtoken');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const authController = require('./controllers/authController');
@@ -28,7 +29,6 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
-app.use(express.static('public'));
 
 // Configuration du middleware de session
 const sessionMiddleware = session({
@@ -45,7 +45,7 @@ io.use((socket, next) => {
     sessionMiddleware(socket.request, socket.request.res || {}, next);
 });
 
-// Routes
+// Routes d'authentification
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', authController.verifyToken);  // Protégez les routes de chat avec le middleware de vérification
 
@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/login.html');
 });
 
-// Route alternative pour index.html
+// Route pour accéder à index.html, protégée par une vérification côté client
 app.get('/index', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
@@ -65,18 +65,21 @@ let connectedUsers = {};
 io.on('connection', (socket) => {
     console.log('Nouvelle connexion:', socket.id);
 
-    socket.on('join', ({ email, token }) => {
+    // Gérer la connexion avec vérification du token JWT
+    socket.on('join', ({ token }) => {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            socket.request.session.userEmail = email;
+            socket.request.session.userEmail = decoded.email;
             socket.request.session.save();
-            connectedUsers[email] = socket.id;
-            console.log(`${email} connecté avec l'ID ${socket.id}`);
+            connectedUsers[decoded.email] = socket.id;
+            console.log(`${decoded.email} connecté avec l'ID ${socket.id}`);
         } catch (error) {
             console.log("Token invalide");
+            socket.disconnect();  // Déconnecter l'utilisateur si le token est invalide
         }
     });
 
+    // Gérer les messages privés
     socket.on('private_message', ({ to, message }) => {
         const userEmail = socket.request.session.userEmail;
         if (userEmail) {
@@ -89,6 +92,7 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Gérer la déconnexion
     socket.on('disconnect', () => {
         console.log('Utilisateur déconnecté:', socket.id);
         for (let email in connectedUsers) {
