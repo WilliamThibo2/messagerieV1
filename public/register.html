@@ -33,7 +33,7 @@
 
                 if (response.ok) {
                     alert("Inscription réussie. Vous pouvez maintenant vous connecter.");
-                    window.location.href = '/login.html';
+                    window.location.href = '/login';
                 } else {
                     const data = await response.json();
                     alert(data.error || "Erreur lors de l'inscription");
