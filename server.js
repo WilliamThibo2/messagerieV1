@@ -15,7 +15,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: 'http://votre-domaine.com',  // Remplacez par votre domaine
+        origin: 'https://messagerie2-1.onrender.com/',  // Remplacez par votre domaine
         methods: ['GET', 'POST'],
     },
 });
@@ -25,7 +25,7 @@ connectDB();
 
 // Configuration des middlewares
 app.use(cors({
-    origin: 'http://votre-domaine.com',  // Remplacez par votre domaine
+    origin: 'https://messagerie2-1.onrender.com/',  // Remplacez par votre domaine
     credentials: true,
 }));
 app.use(express.json());
