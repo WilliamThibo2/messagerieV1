@@ -1,0 +1,55 @@
+/* Style général du corps */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Titres */
+h2 {
+    color: #333;
+}
+
+/* Champs de saisie */
+input[type="email"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Texte des boutons */
+button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer; /* Change le curseur en main */
+}
+
+button:hover {
+    background-color: #0056b3; /* Couleur de fond au survol */
+}
+
+/* Liste des messages */
+#messages {
+    list-style-type: none;
+    padding: 0;
+    max-height: 300px; /* Limite la hauteur de la liste des messages */
+    overflow-y: auto; /* Ajoute un défilement si nécessaire */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin-bottom: 10px;
+}
+
+/* Élément de la liste des messages */
+#messages li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background-color: #f9f9f9; /* Fond des messages */
+}
