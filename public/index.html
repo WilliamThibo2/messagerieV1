@@ -1,43 +1,19 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messagerie Inspirée d'iMessage</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Messagerie Instantanée</title>
 </head>
 <body>
-    <div class="container">
-        <!-- Liste des contacts -->
-        <div class="sidebar">
-            <h2>Contacts</h2>
-            <ul>
-                <li class="contact">Utilisateur 1</li>
-                <li class="contact">Utilisateur 2</li>
-                <li class="contact">Utilisateur 3</li>
-            </ul>
-        </div>
+    <h2>Chat Privé</h2>
+    <input id="email" placeholder="Votre email">
+    <input id="toEmail" placeholder="Email du destinataire">
+    <textarea id="message" placeholder="Votre message"></textarea>
+    <button onclick="sendMessage()">Envoyer</button>
+    <ul id="messages"></ul>
 
-        <!-- Zone de chat -->
-        <div class="chat-area">
-            <div class="chat-header">
-                <h2>Discussion</h2>
-            </div>
-            <div class="chat-messages">
-                <div class="message received">
-                    <p>Salut ! Comment ça va ?</p>
-                    <span class="timestamp">11:00</span>
-                </div>
-                <div class="message sent">
-                    <p>Ça va bien, merci ! Et toi ?</p>
-                    <span class="timestamp">11:01</span>
-                </div>
-            </div>
-            <div class="chat-input">
-                <input type="text" placeholder="Écrire un message..." />
-                <button>Envoyer</button>
-            </div>
-        </div>
-    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="chat.js"></script>
 </body>
 </html>
