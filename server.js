@@ -8,6 +8,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const authController = require('./controllers/authController');
 const cors = require('cors');
+const MongoStore = require('connect-mongo');  // Import de connect-mongo
 
 require('dotenv').config();
 
@@ -19,7 +20,6 @@ const io = socketIo(server, {
         methods: ['GET', 'POST'],
     },
 });
-console.log('JWT Secret:', process.env.JWT_SECRET);
 
 // Connexion à la base de données
 connectDB();
@@ -31,12 +31,15 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Configuration du middleware de session
+// Configuration du middleware de session avec MongoDB
 const sessionMiddleware = session({
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,  // Utilise l'URL de MongoDB dans votre fichier .env
+    }),
     secret: process.env.JWT_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: { secure: true },  // Mettez `true` si vous utilisez HTTPS en production
 });
 
 app.use(sessionMiddleware);
