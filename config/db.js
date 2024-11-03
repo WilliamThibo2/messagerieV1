@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://<db_username>:<db_password>@messagerie.ckrck.mongodb.net/?retryWrites=true&w=majority&appName=Messagerie";
+const uri = 'mongodb://<database>:<admin1234>@<host>:<27017>/<Messagerie>';
 
 const connectDB = async () => {
     try {
