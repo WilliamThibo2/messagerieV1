@@ -1,30 +1,43 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Messagerie Instantanée</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messagerie Inspirée d'iMessage</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <ul>
-        <li>Utilisateur 1</li>
-        <li>Utilisateur 2</li>
-        <li>Utilisateur 3</li>
-        <!-- Plus d'utilisateurs -->
-      </ul>
+    <div class="container">
+        <!-- Liste des contacts -->
+        <div class="sidebar">
+            <h2>Contacts</h2>
+            <ul>
+                <li class="contact">Utilisateur 1</li>
+                <li class="contact">Utilisateur 2</li>
+                <li class="contact">Utilisateur 3</li>
+            </ul>
+        </div>
+
+        <!-- Zone de chat -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <h2>Discussion</h2>
+            </div>
+            <div class="chat-messages">
+                <div class="message received">
+                    <p>Salut ! Comment ça va ?</p>
+                    <span class="timestamp">11:00</span>
+                </div>
+                <div class="message sent">
+                    <p>Ça va bien, merci ! Et toi ?</p>
+                    <span class="timestamp">11:01</span>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Écrire un message..." />
+                <button>Envoyer</button>
+            </div>
+        </div>
     </div>
-    <div class="chat">
-      <div class="messages">
-        <p>Message 1</p>
-        <p>Message 2</p>
-        <!-- Plus de messages -->
-      </div>
-      <input type="text" placeholder="Écrire un message..." />
-    </div>
-  </div>
-  <script src="script.js"></script>
 </body>
 </html>
