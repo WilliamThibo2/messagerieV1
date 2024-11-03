@@ -4,6 +4,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
+const authController = require('./controllers/authController');
 const cors = require('cors');
 
 require('dotenv').config();
@@ -12,7 +13,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: '*',
+        origin: 'http://votre-domaine.com',
+        methods: ['GET', 'POST'],
     },
 });
 
@@ -20,28 +22,29 @@ const io = socketIo(server, {
 connectDB();
 
 // Configuration des middlewares
-app.use(cors());
+app.use(cors({
+    origin: 'http://votre-domaine.com',
+    credentials: true,
+}));
 app.use(express.json());
 app.use(express.static('public'));
 
 // Configuration du middleware de session
 const sessionMiddleware = session({
-    secret: 'votreSecretSession', // Changez pour un secret plus sûr
+    secret: process.env.JWT_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Mettez `secure: true` si vous utilisez HTTPS
+    cookie: { secure: false }
 });
 
-// Utiliser la session avec Express
 app.use(sessionMiddleware);
-
-// Partager la session entre Express et Socket.io
 io.use((socket, next) => {
     sessionMiddleware(socket.request, socket.request.res || {}, next);
 });
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/chat', authController.verifyToken);  // Protégez les routes de chat avec le middleware de vérification
 
 // Gérer les utilisateurs connectés
 let connectedUsers = {};
@@ -49,11 +52,16 @@ let connectedUsers = {};
 io.on('connection', (socket) => {
     console.log('Nouvelle connexion:', socket.id);
 
-    socket.on('join', ({ email }) => {
-        socket.request.session.userEmail = email;
-        socket.request.session.save();
-        connectedUsers[email] = socket.id;
-        console.log(`${email} connecté avec l'ID ${socket.id}`);
+    socket.on('join', ({ email, token }) => {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            socket.request.session.userEmail = email;
+            socket.request.session.save();
+            connectedUsers[email] = socket.id;
+            console.log(`${email} connecté avec l'ID ${socket.id}`);
+        } catch (error) {
+            console.log("Token invalide");
+        }
     });
 
     socket.on('private_message', ({ to, message }) => {
