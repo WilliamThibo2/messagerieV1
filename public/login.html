@@ -8,20 +8,24 @@
 <body>
     <h2>Connexion</h2>
     <input id="email" placeholder="Votre email">
+    <input id="password" type="password" placeholder="Votre mot de passe">
     <button onclick="login()">Se connecter</button>
     <script>
         async function login() {
             const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email })
+                body: JSON.stringify({ email, password })
             });
 
             if (response.ok) {
-                window.location.href = '/chat.html'; // Redirige vers le chat après la connexion
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                window.location.href = '/index.html';
             } else {
                 alert("Échec de la connexion");
             }
@@ -29,3 +33,4 @@
     </script>
 </body>
 </html>
+
