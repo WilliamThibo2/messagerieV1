@@ -28,14 +28,17 @@
 </div>
 <div id="chat-container" style="display: none;">
     <button id="toggle-dark-mode">Mode Sombre</button>
+    <button id="add-conversation">+</button> <!-- Ajout du bouton "+" -->
     <div id="messages"></div>
     <div id="typing-indicator"></div>
     <div id="input-container">
         <form id="message-form">
+            <input type="text" id="recipient-input" placeholder="Destinataire" required>
             <input type="text" id="message-input" placeholder="Entrez un message" required>
             <button type="submit">Envoyer</button>
         </form>
     </div>
+</div>
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script>
