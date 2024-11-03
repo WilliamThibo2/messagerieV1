@@ -30,6 +30,38 @@ db.serialize(() => {
     )`);
 });
 
+// Fonction pour enregistrer un utilisateur
+const registerUser = (username, email, password, callback) => {
+    bcrypt.hash(password, 10, (err, hash) => {
+        if (err) return callback(err);
+        db.run(
+            `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
+            [username, email, hash],
+            function (err) {
+                if (err) return callback(err);
+                callback(null, this.lastID); // retourne l'ID de l'utilisateur
+            }
+        );
+    });
+};
+
+// Fonction pour authentifier un utilisateur
+const authenticateUser = (email, password, callback) => {
+    db.get(`SELECT * FROM users WHERE email = ?`, [email], (err, user) => {
+        if (err) return callback(err);
+        if (!user) return callback(null, false); // utilisateur non trouvé
+        bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) return callback(err);
+            callback(null, isMatch ? user : false); // retourne l'utilisateur ou false
+        });
+    });
+};
+
+// Fonction pour générer un token JWT
+const generateToken = (user) => {
+    return jwt.sign({ id: user.id, username: user.username }, 'ton_secret_key', { expiresIn: '1h' });
+};
+
 // Fonction pour créer une conversation entre deux utilisateurs
 const createConversation = (user1, user2, callback) => {
     db.run(
@@ -59,4 +91,11 @@ const getMessagesByConversation = (conversation_id, callback) => {
     );
 };
 
-module.exports = { registerUser, authenticateUser, generateToken, createConversation, saveMessage, getMessagesByConversation };
+module.exports = { 
+    registerUser, 
+    authenticateUser, 
+    generateToken, 
+    createConversation, 
+    saveMessage, 
+    getMessagesByConversation 
+};
