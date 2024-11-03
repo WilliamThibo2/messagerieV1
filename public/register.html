@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+</head>
+<body>
+    <h2>Inscription</h2>
+    <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="Votre email" required>
+    </div>
+    <div>
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" placeholder="Votre mot de passe" required>
+    </div>
+    <button onclick="register()">S'inscrire</button>
+
+    <script>
+        async function register() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    alert("Inscription réussie. Vous pouvez maintenant vous connecter.");
+                    window.location.href = '/login.html';
+                } else {
+                    const data = await response.json();
+                    alert(data.error || "Erreur lors de l'inscription");
+                }
+            } catch (error) {
+                console.error("Erreur lors de l'inscription :", error);
+                alert("Erreur lors de l'inscription");
+            }
+        }
+    </script>
+</body>
+</html>
