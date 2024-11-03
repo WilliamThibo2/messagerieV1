@@ -7,27 +7,42 @@
 </head>
 <body>
     <h2>Connexion</h2>
-    <input id="email" placeholder="Votre email">
-    <input id="password" type="password" placeholder="Votre mot de passe">
+    <div>
+        <label for="email">Email</label>
+        <input id="email" placeholder="Votre email" required>
+    </div>
+    <div>
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" placeholder="Votre mot de passe" required>
+    </div>
     <button onclick="login()">Se connecter</button>
+
     <script>
         async function login() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password })
-            });
 
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('token', data.token);
-                window.location.href = '/index.html';
-            } else {
-                alert("Échec de la connexion");
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.token); // Stocke le jeton JWT
+                    window.location.href = '/index.html';      // Redirige vers la page protégée
+                } else if (response.status === 401) {
+                    alert("Identifiants incorrects");
+                } else {
+                    alert("Échec de la connexion");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la connexion :", error);
+                alert("Erreur lors de la connexion");
             }
         }
     </script>
