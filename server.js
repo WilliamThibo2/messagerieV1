@@ -49,9 +49,14 @@ io.use((socket, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', authController.verifyToken);  // Protégez les routes de chat avec le middleware de vérification
 
-// Route pour servir login.html par défaut
+// Route pour servir login.html à la racine
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/login.html');
+});
+
+// Route alternative pour index.html
+app.get('/index', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 // Gérer les utilisateurs connectés
