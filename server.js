@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const session = require('express-session');
 const http = require('http');
@@ -16,7 +15,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: 'https://messagerie2-1.onrender.com/',  // Remplacez par votre domaine
+        origin: 'https://messagerie2-1.onrender.com/', 
         methods: ['GET', 'POST'],
     },
 });
@@ -24,12 +23,11 @@ const io = socketIo(server, {
 connectDB();
 
 app.use(cors({
-    origin: 'https://messagerie2-1.onrender.com/',  // Remplacez par votre domaine
+    origin: 'https://messagerie2-1.onrender.com/',  
     credentials: true,
 }));
 app.use(express.json());
 
-// Configuration du middleware de session avec MongoDB
 const sessionMiddleware = session({
     store: MongoStore.create({
         mongoUrl: process.env.MONGO_URI,
@@ -37,12 +35,11 @@ const sessionMiddleware = session({
     secret: process.env.JWT_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === 'production' },  // Cookies sécurisés uniquement en production
+    cookie: { secure: process.env.NODE_ENV === 'production' },
 });
 
 app.use(sessionMiddleware);
 
-// Partager la session avec Socket.io
 io.use((socket, next) => {
     sessionMiddleware(socket.request, socket.request.res || {}, next);
 });
