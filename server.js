@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const session = require('express-session');
 const http = require('http');
@@ -48,6 +49,11 @@ io.use((socket, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', authController.verifyToken);  // Protégez les routes de chat avec le middleware de vérification
 
+// Route pour servir login.html par défaut
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/login.html');
+});
+
 // Gérer les utilisateurs connectés
 let connectedUsers = {};
 
@@ -93,4 +99,3 @@ io.on('connection', (socket) => {
 server.listen(process.env.PORT, () => {
     console.log(`Serveur démarré sur le port ${process.env.PORT}`);
 });
-
