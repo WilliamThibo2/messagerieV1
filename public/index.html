@@ -32,7 +32,7 @@
     <div id="typing-indicator"></div>
     <div id="input-container">
         <form id="message-form">
-            <input type="text" id="message-input" placeholder="Entrez un message">
+            <input type="text" id="message-input" placeholder="Entrez un message" required>
             <button type="submit">Envoyer</button>
         </form>
     </div>
@@ -47,13 +47,18 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
     const email = document.getElementById('signup-email').value;
     const password = document.getElementById('signup-password').value;
 
-    const response = await fetch('/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
-    });
-    const result = await response.json();
-    alert(result.message);
+    try {
+        const response = await fetch('/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, password })
+        });
+        const result = await response.json();
+        alert(result.message);
+    } catch (error) {
+        console.error(error);
+        alert('Une erreur est survenue : ' + error.message);
+    }
 });
 
 document.getElementById('signin-form').addEventListener('submit', async (e) => {
@@ -61,20 +66,25 @@ document.getElementById('signin-form').addEventListener('submit', async (e) => {
     const email = document.getElementById('signin-email').value;
     const password = document.getElementById('signin-password').value;
 
-    const response = await fetch('/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-    });
-    const result = await response.json();
+    try {
+        const response = await fetch('/signin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const result = await response.json();
 
-    if (response.ok) {
-        localStorage.setItem('token', result.token);
-        document.getElementById('login-container').style.display = 'none';
-        document.getElementById('chat-container').style.display = 'block';
-        socket.username = result.username;  // Stocker le pseudonyme
-    } else {
-        alert(result.message);
+        if (response.ok) {
+            localStorage.setItem('token', result.token);
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('chat-container').style.display = 'block';
+            socket.username = result.username;  // Stocker le pseudonyme
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Une erreur est survenue : ' + error.message);
     }
 });
 
@@ -124,20 +134,6 @@ toggleDarkMode.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
     toggleDarkMode.textContent = document.body.classList.contains("dark-mode") ? "Mode Clair" : "Mode Sombre";
 });
-    <div id="chat-container" style="display: none;">
-    <button id="toggle-dark-mode">Mode Sombre</button>
-    <div id="messages"></div>
-    <div id="typing-indicator"></div>
-    <div id="input-container">
-        <form id="message-form">
-            <input type="text" id="recipient-input" placeholder="Nom d'utilisateur du destinataire" required>
-            <input type="text" id="message-input" placeholder="Entrez un message" required>
-            <button type="submit">Envoyer</button>
-        </form>
-    </div>
-</div>
-
 </script>
 </body>
 </html>
-
