@@ -103,4 +103,10 @@ socket.on('receive_private_message', (data) => {
     document.getElementById('messages').appendChild(messageElem);
     document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 });
-
+document.getElementById('add-conversation').addEventListener('click', () => {
+    const recipient = prompt("Entrez le nom d'utilisateur du destinataire:");
+    if (recipient) {
+        // Émet l'événement pour démarrer une conversation
+        socket.emit('start_conversation', { user1: socket.username, user2: recipient });
+    }
+});
