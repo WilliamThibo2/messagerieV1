@@ -54,6 +54,9 @@ app.get('/', (req, res) => {
 app.get('/index', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
+app.get('/register', (req, res) => {
+    res.sendFile(__dirname + '/public/register.html');
+});
 
 let connectedUsers = {};
 
