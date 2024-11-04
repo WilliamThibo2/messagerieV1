@@ -1,76 +1,61 @@
-const User = require('../models/User'); // Modèle utilisateur
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User'); 
+require('dotenv').config();
 
-// Inscription
+// Fonction d'inscription
 exports.register = async (req, res) => {
     const { email, password } = req.body;
-
     try {
-        // Vérifier si l'email est déjà utilisé
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ error: "Cet email est déjà utilisé" });
+            return res.status(400).json({ error: 'Email déjà utilisé' });
         }
 
-        // Hasher le mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({ email, password: hashedPassword });
+        await newUser.save();
 
-        // Créer un nouvel utilisateur
-        const user = new User({ email, password: hashedPassword });
-        await user.save();
-
-        res.status(201).json({ message: "Inscription réussie" });
+        res.status(201).json({ message: 'Utilisateur enregistré avec succès' });
     } catch (error) {
-        console.error("Erreur lors de l'inscription :", error);
-        res.status(500).json({ error: "Erreur serveur" });
+        console.error("Erreur lors de l'enregistrement :", error);
+        res.status(500).json({ error: 'Erreur lors de l\'enregistrement' });
     }
 };
 
-// Connexion
+// Fonction de connexion
 exports.login = async (req, res) => {
     const { email, password } = req.body;
-
     try {
-        // Rechercher l'utilisateur par email
         const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(401).json({ error: "Identifiants incorrects" });
+
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({ error: 'Identifiants incorrects' });
         }
 
-        // Vérifier le mot de passe
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ error: "Identifiants incorrects" });
-        }
+        const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        // Créer un token JWT
-        const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-        res.status(200).json({ token });
+        res.json({ token });
     } catch (error) {
         console.error("Erreur lors de la connexion :", error);
-        res.status(500).json({ error: "Erreur serveur" });
+        res.status(500).json({ error: 'Erreur lors de la connexion' });
     }
 };
 
-// Vérifier le token
-exports.verifyToken = (req, res) => {
-    res.status(200).json({ message: "Token valide" });
-};
+// Middleware de vérification du token
+exports.verifyToken = (req, res, next) => {
+    const token = req.headers.authorization?.split(' ')[1];
 
-// Supprimer le compte
-exports.deleteAccount = async (req, res) => {
+    if (!token) {
+        return res.status(401).json({ error: 'Accès refusé. Aucun token fourni.' });
+    }
+
     try {
-        // Supprimer l'utilisateur basé sur l'email du token
-        const user = await User.findOneAndDelete({ email: req.user.email });
-        if (!user) {
-            return res.status(404).json({ error: 'Utilisateur non trouvé' });
-        }
-        res.status(200).json({ message: 'Compte supprimé avec succès' });
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        next();
     } catch (error) {
-        console.error("Erreur lors de la suppression du compte :", error);
-        res.status(500).json({ error: 'Erreur lors de la suppression du compte' });
+        console.error("Token invalide :", error);
+        res.status(401).json({ error: 'Token invalide' });
     }
 };
-
