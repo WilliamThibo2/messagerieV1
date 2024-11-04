@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messagerie Instantanée</title>
-    <link rel="stylesheet" href="/style.css"> <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <h2>Chat Privé</h2>
@@ -16,10 +16,10 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/chat.js"></script>
     <script>
-        // Vérifier si l'utilisateur est authentifié
+        // Vérifie si l'utilisateur est authentifié
         const token = localStorage.getItem('token');
         if (!token) {
-            // Rediriger vers la page de connexion si le token est manquant
+            // Redirige vers login.html si l'utilisateur n'est pas connecté
             window.location.href = '/login';
         }
     </script>
