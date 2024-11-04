@@ -6,6 +6,14 @@
     <title>Inscription</title>
 </head>
 <body>
+        <script>
+        // Vérifie si l'utilisateur est déjà connecté
+        const token = localStorage.getItem('token');
+        if (token) {
+            // Redirige l'utilisateur vers la page de chat s'il est déjà connecté
+            window.location.href = '/chat';
+        }
+    </script>
     <h2>Inscription</h2>
     <div>
         <label for="email">Email</label>
