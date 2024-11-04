@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-        <script>
+    <script>
         // Vérifie si l'utilisateur est déjà connecté
         const token = localStorage.getItem('token');
         if (token) {
@@ -15,6 +15,7 @@
             window.location.href = '/chat';
         }
     </script>
+
     <h2>Inscription</h2>
     <div>
         <label for="email">Email</label>
@@ -24,12 +25,27 @@
         <label for="password">Mot de passe</label>
         <input id="password" type="password" placeholder="Votre mot de passe" required>
     </div>
+    <div>
+        <label for="confirmPassword">Confirmez le mot de passe</label>
+        <input id="confirmPassword" type="password" placeholder="Confirmez votre mot de passe" required>
+    </div>
+    <p id="passwordError" style="color: red;"></p> <!-- Message d'erreur si les mots de passe ne correspondent pas -->
     <button onclick="register()">S'inscrire</button>
 
     <script>
         async function register() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const passwordError = document.getElementById('passwordError');
+
+            // Vérifie si les mots de passe correspondent
+            if (password !== confirmPassword) {
+                passwordError.innerText = "Les mots de passe ne correspondent pas.";
+                return; // Stoppe la fonction si les mots de passe ne correspondent pas
+            } else {
+                passwordError.innerText = ""; // Efface le message d'erreur si tout est correct
+            }
 
             try {
                 const response = await fetch('/api/auth/register', {
