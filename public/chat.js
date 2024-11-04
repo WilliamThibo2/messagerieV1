@@ -46,6 +46,7 @@ document.getElementById('signOutButton').addEventListener('click', function() {
     // Redirige vers la page de connexion
     window.location.href = '/login';
 });
+
 // Ouvre la boîte de dialogue de suppression du compte
 function openSettings() {
     document.getElementById('deleteAccountModal').style.display = 'block';
@@ -81,4 +82,3 @@ async function deleteAccount() {
         alert("Erreur lors de la suppression du compte");
     }
 }
-
