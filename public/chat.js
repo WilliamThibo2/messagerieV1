@@ -46,3 +46,39 @@ document.getElementById('signOutButton').addEventListener('click', function() {
     // Redirige vers la page de connexion
     window.location.href = '/login';
 });
+// Ouvre la boîte de dialogue de suppression du compte
+function openSettings() {
+    document.getElementById('deleteAccountModal').style.display = 'block';
+}
+
+// Ferme la boîte de dialogue
+function closeModal() {
+    document.getElementById('deleteAccountModal').style.display = 'none';
+}
+
+// Fonction pour supprimer le compte
+async function deleteAccount() {
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch('/api/auth/deleteAccount', {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            alert("Votre compte a été supprimé.");
+            localStorage.removeItem('token');
+            window.location.href = '/register';
+        } else {
+            alert("Échec de la suppression du compte. Veuillez réessayer.");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la suppression du compte :", error);
+        alert("Erreur lors de la suppression du compte");
+    }
+}
+
