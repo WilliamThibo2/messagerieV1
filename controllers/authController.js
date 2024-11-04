@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User'); 
 require('dotenv').config();
 
+
 // Fonction d'inscription
 exports.register = async (req, res) => {
     const { email, password } = req.body;
@@ -45,10 +46,9 @@ exports.login = async (req, res) => {
 // Fonction de suppression de compte
 exports.deleteAccount = async (req, res) => {
     try {
-        const userId = req.user.userId; // Utilise l'ID utilisateur à partir du token décodé
+        const userId = req.user.userId; // Utilisation de l'ID utilisateur récupéré depuis le token
 
         const deletedUser = await User.findByIdAndDelete(userId);
-
         if (!deletedUser) {
             return res.status(404).json({ error: 'Utilisateur non trouvé' });
         }
@@ -56,7 +56,7 @@ exports.deleteAccount = async (req, res) => {
         res.status(200).json({ message: 'Compte supprimé avec succès' });
     } catch (error) {
         console.error("Erreur lors de la suppression du compte :", error);
-        res.status(500).json({ error: 'Erreur lors de la suppression du compte' });
+        res.status(500).json({ error: 'Erreur de suppression du compte' });
     }
 };
 
