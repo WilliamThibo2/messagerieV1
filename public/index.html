@@ -14,6 +14,15 @@
     <button onclick="sendMessage()">Envoyer</button>
     <ul id="messages"></ul>
 <button id="signOutButton" class="logout-button"><i class="fas fa-sign-out-alt"></i></button>
+<button id="settingsButton" class="icon-button settings-button" onclick="openSettings()"><i class="fas fa-cog"></i></button>
+
+    <div id="deleteAccountModal" class="modal">
+        <div class="modal-content">
+            <p>Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.</p>
+            <button onclick="deleteAccount()">Confirmer</button>
+            <button onclick="closeModal()">Annuler</button>
+        </div>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/chat.js"></script>
