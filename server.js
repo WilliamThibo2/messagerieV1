@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const authController = require('./controllers/authController');
 const cors = require('cors');
 const MongoStore = require('connect-mongo');
+const path = require('path');  // Ajout du module 'path' pour gérer les chemins de fichiers
 
 require('dotenv').config();
 
@@ -26,7 +27,11 @@ app.use(cors({
     origin: 'https://messagerie2-1.onrender.com/',  
     credentials: true,
 }));
+
 app.use(express.json());
+
+// Servir les fichiers statiques depuis le dossier 'public'
+app.use(express.static(path.join(__dirname, 'public')));
 
 const sessionMiddleware = session({
     store: MongoStore.create({
@@ -48,14 +53,15 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', authController.verifyToken);
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/login.html');
+    res.sendFile(path.join(__dirname, '/public/login.html'));
 });
 
 app.get('/index', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+    res.sendFile(path.join(__dirname, '/public/index.html'));
 });
+
 app.get('/register', (req, res) => {
-    res.sendFile(__dirname + '/public/register.html');
+    res.sendFile(path.join(__dirname, '/public/register.html'));
 });
 
 let connectedUsers = {};
