@@ -53,11 +53,17 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', authController.verifyToken);
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/login.html'));
+    res.redirect('/login');
 });
 
-app.get('/index', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/index.html'));
+// Route pour afficher la page de connexion
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/login.html'));
+});
+
+// Route pour afficher la page de chat après connexion
+app.get('/chat', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.get('/register', (req, res) => {
