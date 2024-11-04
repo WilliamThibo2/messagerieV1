@@ -60,7 +60,6 @@ exports.deleteAccount = async (req, res) => {
     }
 };
 
-
 // Middleware de vérification du token
 exports.verifyToken = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
