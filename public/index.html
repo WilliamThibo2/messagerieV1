@@ -25,5 +25,23 @@
             window.location.href = '/login';
         }
     </script>
+    <button id="deleteAccountBtn" class="settings-button">🛠️ Supprimer le compte</button>
+
+    <script>
+    document.getElementById("deleteAccountBtn").addEventListener("click", function () {
+        if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
+            fetch("/auth/deleteAccount", { method: "DELETE" })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Votre compte a été supprimé.");
+                        window.location.href = "/login"; // Redirection après suppression
+                    } else {
+                        alert("Erreur lors de la suppression du compte.");
+                    }
+                });
+        }
+    });
+    </script>
 </body>
 </html>
