@@ -49,9 +49,11 @@ io.use((socket, next) => {
     sessionMiddleware(socket.request, socket.request.res || {}, next);
 });
 
+// Utilisation des routes d'authentification
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', authController.verifyToken);
 
+// Redirection vers la page de connexion
 app.get('/', (req, res) => {
     res.redirect('/login');
 });
@@ -68,6 +70,18 @@ app.get('/chat', (req, res) => {
 
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/register.html'));
+});
+
+// Nouvelle route pour supprimer le compte utilisateur
+app.delete('/auth/deleteAccount', async (req, res) => {
+    try {
+        const userId = req.user.id; // Assurez-vous que l'utilisateur est connecté
+        await User.findByIdAndDelete(userId);
+        res.json({ success: true });
+    } catch (error) {
+        console.error("Erreur lors de la suppression du compte:", error);
+        res.json({ success: false, error: "Erreur lors de la suppression du compte." });
+    }
 });
 
 let connectedUsers = {};
