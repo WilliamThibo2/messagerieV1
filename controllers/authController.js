@@ -1,10 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); 
+const User = require('../models/User');
 require('dotenv').config();
 
-
-// Fonction d'inscription
 exports.register = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -24,7 +22,6 @@ exports.register = async (req, res) => {
     }
 };
 
-// Fonction de connexion
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -43,37 +40,17 @@ exports.login = async (req, res) => {
     }
 };
 
-// Fonction de suppression de compte
 exports.deleteAccount = async (req, res) => {
-    try {
-        const userId = req.user.userId; // Utilisation de l'ID utilisateur récupéré depuis le token
-
-        const deletedUser = await User.findByIdAndDelete(userId);
-        if (!deletedUser) {
-            return res.status(404).json({ error: 'Utilisateur non trouvé' });
-        }
-
-        res.status(200).json({ message: 'Compte supprimé avec succès' });
-    } catch (error) {
-        console.error("Erreur lors de la suppression du compte :", error);
-        res.status(500).json({ error: 'Erreur de suppression du compte' });
-    }
-};
-
-// Middleware de vérification du token
-exports.verifyToken = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
-
-    if (!token) {
-        return res.status(401).json({ error: 'Accès refusé. Aucun token fourni.' });
-    }
+    if (!token) return res.status(401).json({ error: 'Token non fourni' });
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
+        await User.findByIdAndDelete(decoded.userId);
+
+        res.json({ message: 'Compte supprimé avec succès' });
     } catch (error) {
-        console.error("Token invalide :", error);
-        res.status(401).json({ error: 'Token invalide' });
+        console.error("Erreur lors de la suppression du compte :", error);
+        res.status(500).json({ error: 'Erreur lors de la suppression du compte' });
     }
 };
