@@ -1,4 +1,3 @@
-/* Style général du corps */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -6,12 +5,10 @@ body {
     padding: 20px;
 }
 
-/* Titres */
 h2 {
     color: #333;
 }
 
-/* Champs de saisie */
 input[type="email"],
 input[type="password"],
 textarea {
@@ -22,54 +19,51 @@ textarea {
     border-radius: 4px;
 }
 
-/* Texte des boutons */
 button {
     padding: 10px 15px;
     border: none;
     background-color: #007bff;
     color: white;
     border-radius: 4px;
-    cursor: pointer; /* Change le curseur en main */
+    cursor: pointer;
 }
 
 button:hover {
-    background-color: #0056b3; /* Couleur de fond au survol */
+    background-color: #0056b3;
 }
 
-/* Liste des messages */
 #messages {
     list-style-type: none;
     padding: 0;
-    max-height: 300px; /* Limite la hauteur de la liste des messages */
-    overflow-y: auto; /* Ajoute un défilement si nécessaire */
+    max-height: 300px;
+    overflow-y: auto;
     border: 1px solid #ccc;
     background-color: #fff;
     margin-bottom: 10px;
 }
 
-/* Élément de la liste des messages */
 #messages li {
     padding: 10px;
     border-bottom: 1px solid #eee;
-    background-color: #f9f9f9; /* Fond des messages */
+    background-color: #f9f9f9;
 }
-/* Style pour le bouton de déconnexion */
+
 .logout-button {
     position: absolute;
     top: 20px;
     right: 20px;
     background-color: transparent;
     border: none;
-    font-size: 24px; /* Taille de l'icône */
-    color: #007bff; /* Couleur de l'icône */
+    font-size: 24px;
+    color: #007bff;
     cursor: pointer;
     outline: none;
 }
 
 .logout-button:hover {
-    color: #0056b3; /* Couleur au survol */
+    color: #0056b3;
 }
-/* Boutons d'icônes */
+
 .icon-button {
     position: absolute;
     top: 20px;
@@ -85,14 +79,13 @@ button:hover {
 }
 
 .settings-button {
-    right: 60px; /* Positionne le bouton paramètres à gauche du bouton de déconnexion */
+    right: 60px;
 }
 
 .icon-button:hover {
     color: #0056b3;
 }
 
-/* Style de la boîte de dialogue */
 .modal {
     display: none;
     position: fixed;
@@ -127,4 +120,3 @@ button:hover {
 .modal-content button:hover {
     background-color: #0056b3;
 }
-
