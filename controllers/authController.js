@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const User = require('../models/User'); 
 require('dotenv').config();
 
+// Fonction d'inscription
 exports.register = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -22,6 +23,7 @@ exports.register = async (req, res) => {
     }
 };
 
+// Fonction de connexion
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -40,17 +42,20 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.deleteAccount = async (req, res) => {
+// Middleware de vérification du token
+exports.verifyToken = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ error: 'Token non fourni' });
+
+    if (!token) {
+        return res.status(401).json({ error: 'Accès refusé. Aucun token fourni.' });
+    }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        await User.findByIdAndDelete(decoded.userId);
-
-        res.json({ message: 'Compte supprimé avec succès' });
+        req.user = decoded;
+        next();
     } catch (error) {
-        console.error("Erreur lors de la suppression du compte :", error);
-        res.status(500).json({ error: 'Erreur lors de la suppression du compte' });
+        console.error("Token invalide :", error);
+        res.status(401).json({ error: 'Token invalide' });
     }
 };
