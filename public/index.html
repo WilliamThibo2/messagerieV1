@@ -15,15 +15,16 @@
             <button id="signOutButton" class="logout-button">
                 <i class="fas fa-sign-out-alt"></i>
             </button>
-            <button id="deleteAccountBtn" class="settings-button">🛠️ Supprimer le compte</button>
         </div>
-
+        
         <ul id="messages" class="messages-list"></ul>
 
         <div class="message-input">
             <textarea id="message" placeholder="Votre message"></textarea>
             <button onclick="sendMessage()">Envoyer</button>
         </div>
+
+        <button id="deleteAccountBtn" class="settings-button">🛠️ Supprimer le compte</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -33,7 +34,8 @@
         if (!token) {
             window.location.href = '/login';
         }
-
+    </script>
+    <script>
         document.getElementById("deleteAccountBtn").addEventListener("click", function () {
             if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
                 fetch("/auth/deleteAccount", { method: "DELETE" })
