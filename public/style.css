@@ -1,71 +1,114 @@
-/* Style général du corps */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* Titres */
-h2 {
-    color: #333;
+.chat-container {
+    width: 400px;
+    max-width: 90%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-/* Champs de saisie */
-input[type="email"],
-input[type="password"],
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* Texte des boutons */
-button {
-    padding: 10px 15px;
-    border: none;
+.header {
+    padding: 15px;
     background-color: #007bff;
     color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header h2 {
+    margin: 0;
+    flex-grow: 1;
+}
+
+#toEmail {
+    width: 100%;
+    padding: 8px;
+    border: none;
     border-radius: 4px;
-    cursor: pointer; /* Change le curseur en main */
 }
 
-button:hover {
-    background-color: #0056b3; /* Couleur de fond au survol */
-}
-
-/* Liste des messages */
-#messages {
+.messages-list {
     list-style-type: none;
-    padding: 0;
-    max-height: 300px; /* Limite la hauteur de la liste des messages */
-    overflow-y: auto; /* Ajoute un défilement si nécessaire */
-    border: 1px solid #ccc;
-    background-color: #fff;
-    margin-bottom: 10px;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    margin: 0;
 }
 
-/* Élément de la liste des messages */
-#messages li {
+.messages-list li {
     padding: 10px;
-    border-bottom: 1px solid #eee;
-    background-color: #f9f9f9; /* Fond des messages */
+    margin-bottom: 8px;
+    border-radius: 8px;
+    animation: fadeIn 0.3s ease-in-out;
 }
-/* Style pour le bouton de déconnexion */
+
+.sent-message {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+}
+
+.received-message {
+    background-color: #e9ecef;
+    color: #333;
+    align-self: flex-start;
+}
+
+.message-input {
+    display: flex;
+    padding: 10px;
+    background-color: #f4f4f4;
+}
+
+.message-input textarea {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.message-input button {
+    padding: 8px 12px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.message-input button:hover {
+    background-color: #0056b3;
+}
+
 .logout-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
     background-color: transparent;
     border: none;
-    font-size: 24px; /* Taille de l'icône */
-    color: #007bff; /* Couleur de l'icône */
+    font-size: 24px;
+    color: #f4f4f4;
     cursor: pointer;
     outline: none;
 }
 
 .logout-button:hover {
-    color: #0056b3; /* Couleur au survol */
+    color: #dcdcdc;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
