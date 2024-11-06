@@ -6,31 +6,32 @@
     <title>Inscription</title>
     <link rel="stylesheet" href="/style.css">
 </head>
-<body>
+<body class="auth-body">
     <script>
-        // Vérifie si l'utilisateur est déjà connecté
         const token = localStorage.getItem('token');
         if (token) {
-            // Redirige l'utilisateur vers la page de chat s'il est déjà connecté
             window.location.href = '/chat';
         }
     </script>
 
-    <h2>Inscription</h2>
-    <div>
-        <label for="email">Email</label>
-        <input id="email" type="email" placeholder="Votre email" required>
+    <div class="auth-container">
+        <h2>Inscription</h2>
+        <div class="auth-field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="Votre email" required>
+        </div>
+        <div class="auth-field">
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" placeholder="Votre mot de passe" required>
+        </div>
+        <div class="auth-field">
+            <label for="confirmPassword">Confirmez le mot de passe</label>
+            <input id="confirmPassword" type="password" placeholder="Confirmez votre mot de passe" required>
+        </div>
+        <p id="passwordError" class="error-message"></p>
+        <button onclick="register()">S'inscrire</button>
+        <p>Déjà un compte ? <a href="/login">Connectez-vous ici</a></p>
     </div>
-    <div>
-        <label for="password">Mot de passe</label>
-        <input id="password" type="password" placeholder="Votre mot de passe" required>
-    </div>
-    <div>
-        <label for="confirmPassword">Confirmez le mot de passe</label>
-        <input id="confirmPassword" type="password" placeholder="Confirmez votre mot de passe" required>
-    </div>
-    <p id="passwordError" style="color: red;"></p> <!-- Message d'erreur si les mots de passe ne correspondent pas -->
-    <button onclick="register()">S'inscrire</button>
 
     <script>
         async function register() {
@@ -39,12 +40,11 @@
             const confirmPassword = document.getElementById('confirmPassword').value;
             const passwordError = document.getElementById('passwordError');
 
-            // Vérifie si les mots de passe correspondent
             if (password !== confirmPassword) {
                 passwordError.innerText = "Les mots de passe ne correspondent pas.";
-                return; // Stoppe la fonction si les mots de passe ne correspondent pas
+                return;
             } else {
-                passwordError.innerText = ""; // Efface le message d'erreur si tout est correct
+                passwordError.innerText = "";
             }
 
             try {
