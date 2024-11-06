@@ -6,28 +6,28 @@
     <title>Connexion</title>
     <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-        <script>
-        // Vérifie si l'utilisateur est déjà connecté
+<body class="auth-body">
+    <script>
         const token = localStorage.getItem('token');
         if (token) {
-            // Redirige l'utilisateur vers la page de chat s'il est déjà connecté
             window.location.href = '/chat';
         }
     </script>
-    <h2>Connexion</h2>
-    <div>
-        <label for="email">Email</label>
-        <input id="email" placeholder="Votre email" required>
-    </div>
-    <div>
-        <label for="password">Mot de passe</label>
-        <input id="password" type="password" placeholder="Votre mot de passe" required>
-    </div>
-    <button onclick="login()">Se connecter</button>
-    <p id="error-message" style="color: red;"></p>
-    <p>Pas encore de compte ? <a href="/register">Inscrivez-vous ici</a></p>
 
+    <div class="auth-container">
+        <h2>Connexion</h2>
+        <div class="auth-field">
+            <label for="email">Email</label>
+            <input id="email" placeholder="Votre email" required>
+        </div>
+        <div class="auth-field">
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" placeholder="Votre mot de passe" required>
+        </div>
+        <button onclick="login()">Se connecter</button>
+        <p id="error-message" class="error-message"></p>
+        <p>Pas encore de compte ? <a href="/register">Inscrivez-vous ici</a></p>
+    </div>
 
     <script>
         async function login() {
