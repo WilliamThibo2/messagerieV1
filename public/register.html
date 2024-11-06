@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription</title>
-    <link rel="stylesheet" href="/style_register.css">
+    <link rel="stylesheet" href="/style_auth.css">
 </head>
 <body class="auth-body">
     <script>
@@ -13,7 +13,9 @@
             window.location.href = '/chat';
         }
     </script>
-
+    <div class="theme-toggle">
+    <i class="fas fa-sun"></i>
+    </div>
     <div class="auth-container">
         <h2>Inscription</h2>
         <div class="auth-field">
@@ -69,5 +71,15 @@
             }
         }
     </script>
+    <script>
+    const themeToggle = document.querySelector('.theme-toggle');
+    const body = document.body;
+    
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark');
+        themeToggle.innerHTML = body.classList.contains('dark') ? 
+            '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    });
+</script>
 </body>
 </html>
