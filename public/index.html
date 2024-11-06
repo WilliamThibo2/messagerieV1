@@ -8,40 +8,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <h2>Chat Privé</h2>
-    <input id="toEmail" placeholder="Email du destinataire">
-    <textarea id="message" placeholder="Votre message"></textarea>
-    <button onclick="sendMessage()">Envoyer</button>
-    <ul id="messages"></ul>
-<button id="signOutButton" class="logout-button"><i class="fas fa-sign-out-alt"></i></button>
+    <div class="chat-container">
+        <div class="header">
+            <h2>Chat Privé</h2>
+            <input id="toEmail" placeholder="Email du destinataire">
+            <button id="signOutButton" class="logout-button">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+            <button id="deleteAccountBtn" class="settings-button">🛠️ Supprimer le compte</button>
+        </div>
+
+        <ul id="messages" class="messages-list"></ul>
+
+        <div class="message-input">
+            <textarea id="message" placeholder="Votre message"></textarea>
+            <button onclick="sendMessage()">Envoyer</button>
+        </div>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/chat.js"></script>
     <script>
-        // Vérifie si l'utilisateur est authentifié
         const token = localStorage.getItem('token');
         if (!token) {
-            // Redirige vers login.html si l'utilisateur n'est pas connecté
             window.location.href = '/login';
         }
-    </script>
-    <button id="deleteAccountBtn" class="settings-button">🛠️ Supprimer le compte</button>
 
-    <script>
-    document.getElementById("deleteAccountBtn").addEventListener("click", function () {
-        if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
-            fetch("/auth/deleteAccount", { method: "DELETE" })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Votre compte a été supprimé.");
-                        window.location.href = "/login"; // Redirection après suppression
-                    } else {
-                        alert("Erreur lors de la suppression du compte.");
-                    }
-                });
-        }
-    });
+        document.getElementById("deleteAccountBtn").addEventListener("click", function () {
+            if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
+                fetch("/auth/deleteAccount", { method: "DELETE" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Votre compte a été supprimé.");
+                            window.location.href = "/login";
+                        } else {
+                            alert("Erreur lors de la suppression du compte.");
+                        }
+                    });
+            }
+        });
     </script>
 </body>
 </html>
