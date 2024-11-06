@@ -21,15 +21,27 @@ function sendMessage() {
         socket.emit('private_message', { to: toEmail, message });
         
         // Affiche le message envoyé dans l'interface
-        document.getElementById('messages').innerHTML += `<li>Vous: ${message}</li>`;
+        const messageElement = document.createElement("li");
+        messageElement.classList.add("sent-message");
+        messageElement.innerHTML = `<strong>Vous:</strong> ${message}`;
+        document.getElementById('messages').appendChild(messageElement);
+
+        // Animation d'apparition
+        messageElement.style.animation = "fadeIn 0.3s ease-in-out";
+
         document.getElementById('message').value = ''; // Vide le champ de saisie
     }
 }
 
 // Réception des messages privés de la part du serveur
 socket.on('receive_message', ({ from, message }) => {
-    // Affiche le message reçu dans l'interface avec l'expéditeur
-    document.getElementById('messages').innerHTML += `<li>${from}: ${message}</li>`;
+    const messageElement = document.createElement("li");
+    messageElement.classList.add("received-message");
+    messageElement.innerHTML = `<strong>${from}:</strong> ${message}`;
+    document.getElementById('messages').appendChild(messageElement);
+
+    // Animation d'apparition
+    messageElement.style.animation = "fadeIn 0.3s ease-in-out";
 });
 
 // Fonction de déconnexion
