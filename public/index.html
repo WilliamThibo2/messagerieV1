@@ -12,16 +12,19 @@
         <div class="header">
             <h2>Chat Privé</h2>
             <input id="toEmail" placeholder="Email du destinataire">
+            <button id="themeToggle" class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
             <button id="signOutButton" class="logout-button">
                 <i class="fas fa-sign-out-alt"></i>
             </button>
         </div>
-        
+
         <ul id="messages" class="messages-list"></ul>
 
         <div class="message-input">
-            <textarea id="message" placeholder="Votre message"></textarea>
-            <button onclick="sendMessage()">Envoyer</button>
+            <textarea id="message" placeholder="Écrivez votre message ici..."></textarea>
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Envoyer</button>
         </div>
 
         <button id="deleteAccountBtn" class="settings-button">🛠️ Supprimer le compte</button>
@@ -49,6 +52,15 @@
                         }
                     });
             }
+        });
+
+        // Fonction de changement de thème
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.innerHTML = document.body.classList.contains('dark-mode')
+                ? '<i class="fas fa-sun"></i>'
+                : '<i class="fas fa-moon"></i>';
         });
     </script>
 </body>
