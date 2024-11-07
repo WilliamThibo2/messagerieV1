@@ -11,11 +11,11 @@
     <div class="chat-container">
         <div class="header">
             <h2>Chat Privé</h2>
-            <input id="toEmail" placeholder="Email du destinataire">
-            <button id="themeToggle" class="theme-toggle">
+            <input id="toEmail" placeholder="Email du destinataire" class="fade-in">
+            <button id="themeToggle" class="theme-toggle fade-in">
                 <i class="fas fa-moon"></i>
             </button>
-            <button id="signOutButton" class="logout-button">
+            <button id="signOutButton" class="logout-button fade-in">
                 <i class="fas fa-sign-out-alt"></i>
             </button>
         </div>
@@ -23,11 +23,13 @@
         <ul id="messages" class="messages-list"></ul>
 
         <div class="message-input">
-            <textarea id="message" placeholder="Écrivez votre message ici..."></textarea>
-            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Envoyer</button>
+            <textarea id="message" placeholder="Écrivez votre message ici..." class="slide-in"></textarea>
+            <button onclick="sendMessage()" class="send-button bounce">
+                <i class="fas fa-paper-plane"></i> Envoyer
+            </button>
         </div>
 
-        <button id="deleteAccountBtn" class="settings-button">🛠️ Supprimer le compte</button>
+        <button id="deleteAccountBtn" class="settings-button pulse">🛠️ Supprimer le compte</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -37,8 +39,7 @@
         if (!token) {
             window.location.href = '/login';
         }
-    </script>
-    <script>
+
         document.getElementById("deleteAccountBtn").addEventListener("click", function () {
             if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
                 fetch("/auth/deleteAccount", { method: "DELETE" })
