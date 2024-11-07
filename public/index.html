@@ -8,34 +8,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="chat-app">
-        <!-- Barre latérale pour les paramètres et destinataires -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Messagerie</h2>
-                <button id="signOutButton" class="logout-button">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
-            <input id="toEmail" placeholder="Email du destinataire" class="recipient-input">
+    <div class="chat-container">
+        <div class="header">
+            <h2>Chat Privé</h2>
+            <input id="toEmail" placeholder="Email du destinataire">
             <button id="themeToggle" class="theme-toggle">
                 <i class="fas fa-moon"></i>
             </button>
-            <button id="deleteAccountBtn" class="delete-account">
-                <i class="fas fa-user-slash"></i> Supprimer le compte
+            <button id="signOutButton" class="logout-button">
+                <i class="fas fa-sign-out-alt"></i>
             </button>
-        </aside>
+        </div>
 
-        <!-- Section principale de chat -->
-        <main class="chat-container">
-            <ul id="messages" class="messages-list"></ul>
-            <div class="message-input">
-                <textarea id="message" placeholder="Écrivez votre message ici..."></textarea>
-                <button onclick="sendMessage()" class="send-button">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+        <ul id="messages" class="messages-list">
+            <div class="typing-indicator" id="typingIndicator">
+                <span></span><span></span><span></span>
             </div>
-        </main>
+        </ul>
+
+        <div class="message-input">
+            <textarea id="message" placeholder="Écrivez votre message ici..."></textarea>
+            <button onclick="sendMessage()" class="send-button"><i class="fas fa-paper-plane"></i> Envoyer</button>
+        </div>
+
+        <button id="deleteAccountBtn" class="settings-button">🛠️ Supprimer le compte</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -45,8 +41,20 @@
         if (!token) {
             window.location.href = '/login';
         }
-    </script>
-    <script>
+
+        // Apparition d'animation pour chaque nouveau message
+        function sendMessage() {
+            const messageContent = document.getElementById('message').value.trim();
+            if (messageContent) {
+                const messageElem = document.createElement('li');
+                messageElem.className = 'message-item';
+                messageElem.textContent = messageContent;
+                document.getElementById('messages').appendChild(messageElem);
+                messageElem.classList.add('pop');
+                document.getElementById('message').value = '';
+            }
+        }
+
         document.getElementById("deleteAccountBtn").addEventListener("click", function () {
             if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
                 fetch("/auth/deleteAccount", { method: "DELETE" })
@@ -62,6 +70,7 @@
             }
         });
 
+        // Fonction de changement de thème
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
