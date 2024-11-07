@@ -1,98 +1,172 @@
-/* Style général */
+/* Style de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f6f9;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     height: 100vh;
-    margin: 0;
-}
-
-.chat-container {
-    width: 400px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    background-color: #e6ebf5;
+    color: #333;
     overflow: hidden;
+}
+
+.chat-app {
+    display: flex;
+    width: 90%;
+    max-width: 900px;
+    height: 80vh;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+/* Barre latérale */
+.sidebar {
+    width: 25%;
+    background-color: #f7f9fc;
     display: flex;
     flex-direction: column;
-}
-
-header {
-    background-color: #4a76a8;
-    color: #ffffff;
-    padding: 15px;
-    text-align: center;
-    font-size: 1.2em;
-}
-
-#messages {
-    list-style: none;
     padding: 20px;
-    margin: 0;
-    overflow-y: auto;
-    max-height: 400px;
+    border-right: 1px solid #e0e4e8;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.sidebar h2 {
+    font-size: 1.2em;
+    color: #3a6f9c;
+}
+
+.recipient-input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    font-size: 0.9em;
+}
+
+.theme-toggle, .delete-account, .logout-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6e7a85;
+    font-size: 1em;
+    margin-top: 10px;
+    transition: color 0.3s;
+}
+
+.theme-toggle:hover, .delete-account:hover, .logout-button:hover {
+    color: #333;
+}
+
+/* Conteneur de chat */
+.chat-container {
+    width: 75%;
     display: flex;
     flex-direction: column;
+    background-color: #fff;
 }
 
-#messages li {
-    margin: 10px 0;
+.messages-list {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.messages-list li {
+    margin-bottom: 15px;
     padding: 10px 15px;
-    border-radius: 15px;
-    max-width: 70%;
+    border-radius: 10px;
+    background-color: #f0f2f5;
     position: relative;
-    opacity: 0;
-    animation: slideIn 0.5s ease-in-out forwards;
+    animation: slide-up 0.4s ease forwards;
 }
 
-/* Animation pour les messages */
-@keyframes slideIn {
+.message-input {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid #e0e4e8;
+    background-color: #fafbfc;
+}
+
+.message-input textarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9em;
+    resize: none;
+}
+
+.send-button {
+    background-color: #3a6f9c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.send-button:hover {
+    background-color: #335b7a;
+}
+
+/* Mode sombre */
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #ccc;
+}
+
+.dark-mode .chat-app {
+    background-color: #333;
+}
+
+.dark-mode .sidebar, .dark-mode .chat-container {
+    background-color: #2c2c2c;
+}
+
+.dark-mode .recipient-input, .dark-mode .message-input textarea {
+    background-color: #444;
+    color: #ddd;
+}
+
+.dark-mode .messages-list li {
+    background-color: #444;
+}
+
+.dark-mode .send-button {
+    background-color: #5c85c9;
+}
+
+.dark-mode .theme-toggle i, .dark-mode .delete-account i {
+    color: #ddd;
+}
+
+/* Animations */
+@keyframes slide-up {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.sent-message {
-    background-color: #4a76a8;
-    color: #ffffff;
-    align-self: flex-end;
-    margin-left: auto;
-}
-
-.received-message {
-    background-color: #e9ebf0;
-    color: #333333;
-    align-self: flex-start;
-    margin-right: auto;
-}
-
-/* Style pour la zone de saisie */
-input[type="text"] {
-    padding: 12px;
-    font-size: 1em;
-    border: none;
-    outline: none;
-    width: 100%;
-    border-top: 1px solid #dddddd;
-}
-
-button {
-    background-color: #4a76a8;
-    color: #ffffff;
-    border: none;
-    padding: 12px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #3a5a8a;
 }
