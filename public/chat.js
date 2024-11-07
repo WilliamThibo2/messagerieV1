@@ -13,9 +13,10 @@ if (!token) {
 
 // Fonction pour envoyer un message privé
 function sendMessage() {
-    const toEmail = document.getElementById('toEmail').value;  // Récupère l'email du destinataire
-    const message = document.getElementById('message').value;  // Récupère le contenu du message
+    const toEmail = document.getElementById('toEmail').value.trim();  // Récupère et nettoie l'email du destinataire
+    const message = document.getElementById('message').value.trim();  // Récupère et nettoie le contenu du message
 
+    // Vérifie si l'email et le message sont valides
     if (toEmail && message) {
         // Émet un message privé vers le serveur
         socket.emit('private_message', { to: toEmail, message });
@@ -29,9 +30,13 @@ function sendMessage() {
         // Animation d'apparition
         messageElement.style.animation = "fadeIn 0.3s ease-in-out";
 
-        document.getElementById('message').value = ''; // Vide le champ de saisie
+        // Vide le champ de saisie
+        document.getElementById('message').value = '';
+    } else {
+        alert("Veuillez entrer un message valide et un destinataire.");
     }
 }
+
 
 // Réception des messages privés de la part du serveur
 socket.on('receive_message', ({ from, message }) => {
