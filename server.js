@@ -16,7 +16,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: 'https://messagerie2-1.onrender.com/', 
+        origin: 'https://messagerie-two.vercel.app/', 
         methods: ['GET', 'POST'],
     },
 });
@@ -24,7 +24,7 @@ const io = socketIo(server, {
 connectDB();
 
 app.use(cors({
-    origin: 'https://messagerie2-1.onrender.com/',  
+    origin: 'https://messagerie-two.vercel.app/',  
     credentials: true,
 }));
 
